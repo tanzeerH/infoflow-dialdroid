@@ -1,0 +1,11 @@
+#Fill the following paths to compile with jars:
+
+#Location of soot.jar
+soot.jar=/home/bosu/.m2/repository/soot/soot/20150607/soot-20150607.jar
+
+# Target JAR file
+infoflow.jar=/home/bosu/.m2/repository/infoflow/infoflow/20150607/infoflow-20150607.jar
+infoflow-javadoc.jar=./target/infoflow-javadoc.jar
+infoflow-tests.jar=./target/infoflow-tests.jar
+
+# TODO: compile with projects checked out and recompile them with build.xml
