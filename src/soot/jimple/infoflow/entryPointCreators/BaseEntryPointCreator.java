@@ -396,7 +396,7 @@ public abstract class BaseEntryPointCreator implements IEntryPointCreator {
 		// We cannot create instances of phantom classes as we do not have any
 		// constructor information for them
 		if (createdClass.isPhantom() || createdClass.isPhantomClass()) {
-			logger.warn("Cannot generate constructor for phantom class {}", createdClass.getName());
+			//logger.warn("Cannot generate constructor for phantom class {}", createdClass.getName());
 			failedClasses.add(createdClass);
 			return null;
 		}

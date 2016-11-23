@@ -27,7 +27,7 @@ import soot.jimple.infoflow.data.AccessPath;
 import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 import soot.util.ConcurrentHashMultiMap;
 import soot.util.MultiMap;
-
+import heros.solver.Pair;
 /**
  * Class for collecting information flow results
  * 
@@ -123,7 +123,7 @@ public class InfoflowResults {
 		this.addResult(new ResultSinkInfo(sink, sinkStmt), new ResultSourceInfo(source, sourceStmt));
 	}
 	
-	public void addResult(AccessPath sink, Stmt sinkStmt,
+	public Pair<ResultSourceInfo, ResultSinkInfo> addResult(AccessPath sink, Stmt sinkStmt,
 			AccessPath source, Stmt sourceStmt,
 			Object userData,
 			List<Abstraction> propagationPath) {
@@ -142,19 +142,18 @@ public class InfoflowResults {
 		}
 		
 		// Add the result
-		addResult(sink, sinkStmt, source, sourceStmt, userData, stmtPath, apPath);
+		return addResult(sink, sinkStmt, source, sourceStmt, userData, stmtPath, apPath);
 	}
 	
-	public void addResult(AccessPath sink, Stmt sinkStmt,
-			AccessPath source, Stmt sourceStmt,
-			Object userData,
-			List<Stmt> propagationPath,
-			List<AccessPath> propagationAccessPath) {
-		this.addResult(new ResultSinkInfo(sink, sinkStmt),
-				new ResultSourceInfo(source, sourceStmt, userData, propagationPath,
-						propagationAccessPath));
+	public Pair<ResultSourceInfo, ResultSinkInfo> addResult(AccessPath sink, Stmt sinkStmt, AccessPath source,
+			Stmt sourceStmt, Object userData, List<Stmt> propagationPath, List<AccessPath> propagationAccessPath) {
+		ResultSourceInfo sourceObj = new ResultSourceInfo(source, sourceStmt, userData, propagationPath,
+				propagationAccessPath);
+		ResultSinkInfo sinkObj = new ResultSinkInfo(sink, sinkStmt);
+
+		this.addResult(sinkObj, sourceObj);
+		return new Pair<>(sourceObj, sinkObj);
 	}
-	
 	/**
 	 * Adds the given result to this data structure
 	 * @param sink The sink at which the taint arrived

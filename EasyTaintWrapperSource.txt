@@ -430,5 +430,6 @@
 
 <android.telephony.SmsMessage: android.telephony.SmsMessage createFromPdu(byte[])>
 <android.telephony.gsm.SmsMessage: android.telephony.gsm.SmsMessage createFromPdu(byte[])>
+<android.app.DownloadManager$Request: void <init>(android.net.Uri)>
 
 ~<android.content.SharedPreferences: android.content.SharedPreferences$Editor edit()>

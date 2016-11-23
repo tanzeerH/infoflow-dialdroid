@@ -1024,7 +1024,7 @@ public class AndroidEntryPointCreator extends BaseEntryPointCreator implements I
 				// if we need to call a constructor, we insert the respective Jimple statement here
 				Local classLocal = generateClassConstructor(callbackClass, body, referenceClasses);
 				if (classLocal == null) {
-					logger.warn("Constructor cannot be generated for callback class {}", callbackClass.getName());
+					//logger.warn("Constructor cannot be generated for callback class {}", callbackClass.getName());
 					continue;
 				}
 				classLocals.add(classLocal);
