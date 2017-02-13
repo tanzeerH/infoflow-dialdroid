@@ -65,7 +65,7 @@ public class InfoflowConfiguration {
 	}
 	
 	
-	private static int accessPathLength = 2;
+	private static int accessPathLength = 3;
 	private static boolean useRecursiveAccessPaths = true;
 	private static boolean useThisChainReduction = true;
 	private static boolean pathAgnosticResults = true;
@@ -74,7 +74,7 @@ public class InfoflowConfiguration {
 	private static boolean useTypeTightening = true;
 	
 	private int stopAfterFirstKFlows = 0;	
-	private boolean enableImplicitFlows = false;
+	private boolean enableImplicitFlows = true;
 	private boolean enableStaticFields = true;
 	private boolean enableExceptions = true;
 	private boolean enableArraySizeTainting = true;
