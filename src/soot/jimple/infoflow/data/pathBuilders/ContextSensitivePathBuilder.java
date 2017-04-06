@@ -5,6 +5,7 @@ import heros.solver.Pair;
 
 import static java.lang.System.nanoTime;
 
+import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -85,10 +86,13 @@ public class ContextSensitivePathBuilder extends AbstractAbstractionPathBuilder 
 					
 					// Process the predecessor's neighbors
 					if (pred.getNeighbors() != null)
-						for (Abstraction neighbor : pred.getNeighbors())
+						for (Iterator<Abstraction> itr=pred.getNeighbors().iterator();itr.hasNext();)
+						{
+							Abstraction neighbor=itr.next();
 							if (processPredecessor(scap, neighbor))
 								// Schedule the predecessor
 								spawnSourceFindingTask(neighbor);
+						}
 				}
 			}
 		}
@@ -163,9 +167,17 @@ public class ContextSensitivePathBuilder extends AbstractAbstractionPathBuilder 
 		
 		// Notify our handlers
 		if (resultAvailableHandlers != null)
-			for (OnPathBuilderResultAvailable handler : resultAvailableHandlers)
+		{
+			Iterator<OnPathBuilderResultAvailable> handlerItr=resultAvailableHandlers.iterator();
+			
+			while(handlerItr.hasNext())
+			{
+				OnPathBuilderResultAvailable handler=handlerItr.next();
 				handler.onResultAvailable(newResult.getO1(), newResult.getO2());
-		
+			}
+			
+				
+		}
 		return true;
 	}
 	

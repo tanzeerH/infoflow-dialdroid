@@ -21,17 +21,22 @@ public class AtomicBitSet {
     public boolean set(long n) {
         int bit = 1 << n;
         int idx = (int) (n >>> 5);
-        while (true) {
-            int num = array.get(idx);
-            int num2 = num | bit;
-            
-            // If the bit is already set in the current value, we are too late
-            if (num == num2)
-            	return false;
-            
-            if (array.compareAndSet(idx, num, num2))
-                return true;
-        }
+        try {
+			while (true) {
+			    int num = array.get(idx);
+			    int num2 = num | bit;
+			    
+			    // If the bit is already set in the current value, we are too late
+			    if (num == num2)
+			    	return false;
+			    
+			    if (array.compareAndSet(idx, num, num2))
+			        return true;
+			}
+		} catch (Exception e) {
+			return false;
+		
+		}
     }
     
     public int size() {
