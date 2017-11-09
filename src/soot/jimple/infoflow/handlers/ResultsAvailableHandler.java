@@ -11,6 +11,8 @@
 package soot.jimple.infoflow.handlers;
 
 import soot.jimple.infoflow.results.InfoflowResults;
+import soot.jimple.infoflow.results.ResultSinkInfo;
+import soot.jimple.infoflow.results.ResultSourceInfo;
 import soot.jimple.infoflow.solver.cfg.IInfoflowCFG;
 
 /**
@@ -25,5 +27,6 @@ public interface ResultsAvailableHandler {
 	 * @param results The results that were computed
 	 */
 	public void onResultsAvailable(IInfoflowCFG cfg, InfoflowResults results);
+	public boolean onSingleResultAvailable(ResultSourceInfo source, ResultSinkInfo sinks);
 
 }

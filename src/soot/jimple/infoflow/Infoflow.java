@@ -12,6 +12,7 @@ package soot.jimple.infoflow;
 import heros.solver.CountingThreadPoolExecutor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -235,6 +236,7 @@ public class Infoflow extends AbstractInfoflow {
 			return true;
 		}
 		logger.info("Starting Taint Analysis");
+		System.out.println("call graph: "+ config.getCallgraphAlgorithm());
         iCfg = icfgFactory.buildBiDirICFG(config.getCallgraphAlgorithm(),
         		config.getEnableExceptionTracking());
 
@@ -258,6 +260,7 @@ public class Infoflow extends AbstractInfoflow {
 		InfoflowManager backwardsManager = null;
 		InfoflowSolver backSolver = null;
 		final IAliasingStrategy aliasingStrategy;
+		System.out.println("antialaising algo"+ getConfig().getAliasingAlgorithm());
 		switch (getConfig().getAliasingAlgorithm()) {
 			case FlowSensitive:
 				backwardsManager = new InfoflowManager(config, null,
@@ -267,7 +270,6 @@ public class Infoflow extends AbstractInfoflow {
 				backSolver.setMemoryManager(memoryManager);
 				backSolver.setJumpPredecessors(!pathBuilderFactory.supportsPathReconstruction());
 //				backSolver.setEnableMergePointChecking(true);
-
 				aliasingStrategy = new FlowSensitiveAliasStrategy(iCfg, backSolver);
 				break;
 			case PtsBased:
@@ -363,7 +365,8 @@ public class Infoflow extends AbstractInfoflow {
 		final IAbstractionPathBuilder builder = pathBuilderFactory.createPathBuilder(
 				resultExecutor, iCfg);
 		
-		if (config.getIncrementalResultReporting()) {
+		System.out.println("incremental reporting: "+config.getIncrementalResultReporting());
+		//if (config.getIncrementalResultReporting()) {
 			// Create the path builder
 			this.results = new InfoflowResults();
 			propagationResults.addResultAvailableHandler(new OnTaintPropagationResultAdded() {
@@ -375,13 +378,16 @@ public class Infoflow extends AbstractInfoflow {
 						@Override
 						public void onResultAvailable(ResultSourceInfo source, ResultSinkInfo sink) {
 							// Notify our external handlers
+							System.out.println("incremental updates");
 							for (ResultsAvailableHandler handler : onResultsAvailable) {
-								if (handler instanceof ResultsAvailableHandler2) {
-									ResultsAvailableHandler2 handler2 = (ResultsAvailableHandler2) handler;
-									handler2.onSingleResultAvailable(source, sink);
-								}
+								//if (handler instanceof ResultsAvailableHandler2) {
+									//ResultsAvailableHandler2 handler2 = (ResultsAvailableHandler2) handler;
+								//	handler2.onSingleResultAvailable(source, sink);
+								//handler.onResultsAvailable(cfg, results);
+								handler.onSingleResultAvailable(source, sink);
+															//}
 							}
-					   		results.addResult(sink, source);
+							results.addResult(sink, source);
 						}
 						
 					});
@@ -392,7 +398,7 @@ public class Infoflow extends AbstractInfoflow {
 				}
 				
 			});
-		}
+		//}
 
 
 		forwardSolver.solve();
@@ -503,12 +509,13 @@ public class Infoflow extends AbstractInfoflow {
 				}
 			}
 		}*/
-
+		
 		for (ResultsAvailableHandler handler : onResultsAvailable)
 			handler.onResultsAvailable(iCfg, results);
-
+	
 		if (config.getWriteOutputFiles())
 			PackManager.v().writeOutput();
+		
 
 		maxMemoryConsumption = Math.max(maxMemoryConsumption, getUsedMemory());
 		System.out.println("Maximum memory consumption: " + maxMemoryConsumption / 1E6 + " MB");
@@ -602,6 +609,7 @@ public class Infoflow extends AbstractInfoflow {
 			collectedSinks = new HashSet<>();
 		}
 
+	
 		int sinkCount = 0;
 		if (m.hasActiveBody()) {
 			// Check whether this is a system class we need to ignore
