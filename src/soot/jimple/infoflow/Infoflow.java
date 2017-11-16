@@ -378,13 +378,13 @@ public class Infoflow extends AbstractInfoflow {
 						@Override
 						public void onResultAvailable(ResultSourceInfo source, ResultSinkInfo sink) {
 							// Notify our external handlers
-							System.out.println("incremental updates");
+							//System.out.println("incremental updates");
 							for (ResultsAvailableHandler handler : onResultsAvailable) {
 								//if (handler instanceof ResultsAvailableHandler2) {
 									//ResultsAvailableHandler2 handler2 = (ResultsAvailableHandler2) handler;
 								//	handler2.onSingleResultAvailable(source, sink);
 								//handler.onResultsAvailable(cfg, results);
-								handler.onSingleResultAvailable(source, sink);
+								handler.onSingleResultAvailable(iCfg,source, sink);
 															//}
 							}
 							results.addResult(sink, source);

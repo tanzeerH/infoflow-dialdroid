@@ -27,6 +27,6 @@ public interface ResultsAvailableHandler {
 	 * @param results The results that were computed
 	 */
 	public void onResultsAvailable(IInfoflowCFG cfg, InfoflowResults results);
-	public boolean onSingleResultAvailable(ResultSourceInfo source, ResultSinkInfo sinks);
+	public boolean onSingleResultAvailable(IInfoflowCFG cfg, ResultSourceInfo source, ResultSinkInfo sinks);
 
 }
