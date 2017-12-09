@@ -241,7 +241,8 @@ public class Infoflow extends AbstractInfoflow {
         		config.getEnableExceptionTracking());
 
         int numThreads = Runtime.getRuntime().availableProcessors();
-		CountingThreadPoolExecutor executor = createExecutor(numThreads);
+        //for test
+		CountingThreadPoolExecutor executor = createExecutor(100);
 
 		// Initialize the memory manager
 		PathDataErasureMode erasureMode = PathDataErasureMode.EraseAll;

@@ -5,6 +5,7 @@ import heros.solver.Pair;
 
 import static java.lang.System.nanoTime;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -86,13 +87,16 @@ public class ContextSensitivePathBuilder extends AbstractAbstractionPathBuilder 
 					
 					// Process the predecessor's neighbors
 					if (pred.getNeighbors() != null)
-						for (Iterator<Abstraction> itr=pred.getNeighbors().iterator();itr.hasNext();)
+					{
+						HashSet<Abstraction> m=new HashSet<Abstraction>(pred.getNeighbors());
+						for ( Abstraction neighbor: m)
 						{
-							Abstraction neighbor=itr.next();
+							//Abstraction neighbor=itr.next();
 							if (processPredecessor(scap, neighbor))
 								// Schedule the predecessor
 								spawnSourceFindingTask(neighbor);
 						}
+					}
 				}
 			}
 		}
@@ -168,14 +172,18 @@ public class ContextSensitivePathBuilder extends AbstractAbstractionPathBuilder 
 		// Notify our handlers
 		if (resultAvailableHandlers != null)
 		{
-			Iterator<OnPathBuilderResultAvailable> handlerItr=resultAvailableHandlers.iterator();
-			
-			while(handlerItr.hasNext())
+			//Iterator<OnPathBuilderResultAvailable> handlerItr=resultAvailableHandlers.iterator();
+			HashSet<OnPathBuilderResultAvailable> hashPathBuilder= new HashSet<>(resultAvailableHandlers);
+			/*while(handlerItr.hasNext())
 			{
 				OnPathBuilderResultAvailable handler=handlerItr.next();
 				handler.onResultAvailable(newResult.getO1(), newResult.getO2());
 			}
-			
+			*/
+			for (OnPathBuilderResultAvailable handler: hashPathBuilder)
+			{
+				handler.onResultAvailable(newResult.getO1(), newResult.getO2());
+			}
 				
 		}
 		return true;
@@ -248,9 +256,14 @@ public class ContextSensitivePathBuilder extends AbstractAbstractionPathBuilder 
     	long seconds = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
     	
     	if(seconds>(TIME_BUDGET +this.pathsToFind * 15))
+    	{
     	   	executor.forceExit();
-    	else 		    		
-    		executor.execute(new SourceFindingTask(abs));
+    	}
+    	else 
+    	{
+    		if(!executor.isTerminating() && !executor.isTerminated() && ! executor.isShutdown())
+    		   executor.execute(new SourceFindingTask(abs));
+    	}
 	}
 	
 	@Override
